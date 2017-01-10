@@ -1,0 +1,7 @@
+{% spaceless %}
+;(function (TemplateCache) {
+{%- for originalUrl, cachedUrl in templates -%}
+    TemplateCache.add({{ originalUrl|json_encode|raw }}, {{ cachedUrl|json_encode|raw }});
+{%- endfor -%}
+})(TemplateCache);
+{% endspaceless %}

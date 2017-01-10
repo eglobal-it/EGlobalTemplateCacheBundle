@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="eglobal_template_cache.locales" />
+        <parameter key="eglobal_template_cache.root_dirs" />
+        <parameter key="eglobal_template_cache.cache_dir" />
+        <parameter key="eglobal_template_cache.public_prefix" />
+        <parameter key="eglobal_template_cache.exposed_routes_only" />
+    </parameters>
+
+    <services>
+
+        <service id="eglobal_template_cache.finder.cacheable_template_finder" class="EGlobal\Bundle\TemplateCacheBundle\Finder\CacheableTemplateFinder">
+            <argument id="annotation_reader" type="service" />
+            <argument id="file_locator" type="service" />
+            <argument>%eglobal_template_cache.root_dirs%</argument>
+            <argument>%eglobal_template_cache.exposed_routes_only%</argument>
+        </service>
+
+        <service id="eglobal_template_cache.cache.filesystem_cache" class="EGlobal\Bundle\TemplateCacheBundle\Cache\FilesystemCache">
+            <argument id="templating.engine.twig" type="service" />
+            <argument id="translator" type="service" />
+            <argument>%eglobal_template_cache.cache_dir%</argument>
+            <argument>%eglobal_template_cache.public_prefix%</argument>
+        </service>
+
+        <service id="eglobal_template_cache.dumper.abstract_template_file_dumper" abstract="true">
+            <argument id="eglobal_template_cache.finder.cacheable_template_finder" type="service" />
+            <argument id="eglobal_template_cache.cache.filesystem_cache" type="service" />
+            <argument>%eglobal_template_cache.locales%</argument>
+        </service>
+
+        <service id="eglobal_template_cache.dumper.template_file_dumper"
+                 class="EGlobal\Bundle\TemplateCacheBundle\Dumper\TemplateFileDumper"
+                 parent="eglobal_template_cache.dumper.abstract_template_file_dumper">
+        </service>
+
+        <service id="eglobal_template_cache.dumper.debug_template_file_dumper"
+                 class="EGlobal\Bundle\TemplateCacheBundle\Dumper\DebugTemplateFileDumper"
+                 parent="eglobal_template_cache.dumper.abstract_template_file_dumper">
+        </service>
+
+        <service id="eglobal_template_cache.twig_extension.template_cache_extension" class="EGlobal\Bundle\TemplateCacheBundle\Twig\Extension\TemplateCacheExtension">
+            <argument>%eglobal_template_cache.cache_dir%</argument>
+            <call method="initRuntime">
+                <argument id="twig" type="service" />
+            </call>
+            <tag name="twig.extension" />
+        </service>
+
+    </services>
+</container>
