@@ -101,4 +101,9 @@ class DumpTemplateCacheCommandTest extends KernelTestCase
 
         return $this;
     }
+
+    protected static function getKernelClass(): string
+    {
+        return 'EGlobal\Bundle\TemplateCacheBundle\Tests\Fixtures\AppKernel';
+    }
 }
