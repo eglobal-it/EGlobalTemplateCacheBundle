@@ -6,6 +6,8 @@ namespace EGlobal\Bundle\TemplateCacheBundle\Tests\Cache;
 
 use EGlobal\Bundle\TemplateCacheBundle\Cache\FilesystemCache;
 use EGlobal\Bundle\TemplateCacheBundle\Model\CacheableTemplate;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -21,6 +23,16 @@ class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
      */
     private $translator;
 
+    /**
+     * @var UrlGeneratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $router;
+
+    /**
+     * @var RequestContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $routerContext;
+
     private $cacheDir;
     private $publicPrefix;
 
@@ -31,14 +43,18 @@ class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->engine = $this->getMock(EngineInterface::class);
+        $this->engine = $this->getMockBuilder(EngineInterface::class)->getMock();
         $this->translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
+        $this->routerContext = $this->getMockBuilder(RequestContext::class)->getMock();
+
+        $this->router = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
+        $this->router->expects($this->any())->method('getContext')->willReturn($this->routerContext);
 
         $this->cacheDir = sys_get_temp_dir() . '/templates';
 
         $this->publicPrefix = '/foo/public';
 
-        $this->cache = new FilesystemCache($this->engine, $this->translator, $this->cacheDir, $this->publicPrefix);
+        $this->cache = new FilesystemCache($this->engine, $this->translator, $this->router, $this->cacheDir, $this->publicPrefix);
     }
 
     /**
@@ -64,6 +80,13 @@ class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
         $this->translator->expects($this->once())->method('getLocale')->willReturn('en');
         $this->translator->expects($this->exactly(2))->method('setLocale')
             ->withConsecutive(['ru'], ['en']);
+
+        $this->router->expects($this->exactly(2))->method('setContext');
+        $this->routerContext
+            ->expects($this->exactly(2))
+            ->method('setParameter')
+            ->withConsecutive(['_locale', 'ru'], ['_locale', 'en'])
+        ;
 
         $publicPath = $this->cache->writeTemplate($cacheableTemplate, 'ru');
         $this->assertEquals('/foo/public/ru/fb80156296e1e8f20637d9ef870e0bb6.html', $publicPath);
@@ -92,6 +115,12 @@ class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
         $this->engine->expects($this->once())->method('render')->willThrowException(new \Exception('Test template engine exception'));
         $this->translator->expects($this->once())->method('getLocale')->willReturn('en');
         $this->translator->expects($this->exactly(2))->method('setLocale')->withConsecutive(['ru'], ['en']);
+        $this->router->expects($this->exactly(2))->method('setContext');
+        $this->routerContext
+            ->expects($this->exactly(2))
+            ->method('setParameter')
+            ->withConsecutive(['_locale', 'ru'], ['_locale', 'en'])
+        ;
         $this->cache->writeTemplate($cacheableTemplate, 'ru');
     }
 

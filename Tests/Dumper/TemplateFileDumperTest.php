@@ -39,9 +39,9 @@ class TemplateFileDumperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->templateFinder = $this->getMock(CacheableTemplateFinderInterface::class);
-        $this->templateCache = $this->getMock(TemplateCacheInterface::class);
-        $this->logger = $this->getMock(LoggerInterface::class);
+        $this->templateFinder = $this->getMockBuilder(CacheableTemplateFinderInterface::class)->getMock();
+        $this->templateCache = $this->getMockBuilder(TemplateCacheInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $this->dumper = new TemplateFileDumper($this->templateFinder, $this->templateCache, $this->locales);
         $this->dumper->setLogger($this->logger);

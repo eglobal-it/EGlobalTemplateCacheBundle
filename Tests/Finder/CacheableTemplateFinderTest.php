@@ -23,7 +23,7 @@ class CacheableTemplateFinderTest extends \PHPUnit_Framework_TestCase
     {
         $this->populateFiles();
 
-        $this->fileLocator = $this->getMock(FileLocatorInterface::class);
+        $this->fileLocator = $this->getMockBuilder(FileLocatorInterface::class)->getMock();
         $this->fileLocator->expects($this->at(0))->method('locate')->with('@EGlobalTemplateCache/Controller')->willReturn(sys_get_temp_dir() . '/EGlobal\Bundle\TemplateCacheBundle/Controller');
         $this->fileLocator->expects($this->at(1))->method('locate')->with('%kernel.root_dir%/../OtherTestBundle/Controller')->willReturn(sys_get_temp_dir() . '/OtherTestBundle/Controller');
     }
