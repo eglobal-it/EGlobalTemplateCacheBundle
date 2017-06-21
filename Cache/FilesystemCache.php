@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EGlobal\Bundle\TemplateCacheBundle\Cache;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use EGlobal\Bundle\TemplateCacheBundle\Model\CacheableTemplate;
@@ -15,13 +16,15 @@ class FilesystemCache implements TemplateCacheInterface
 
     private $engine;
     private $translator;
+    private $router;
     private $cacheDir;
     private $publicPrefix;
 
-    public function __construct(EngineInterface $engine, TranslatorInterface $translator, string $cacheDir, string $publicPrefix = '')
+    public function __construct(EngineInterface $engine, TranslatorInterface $translator, UrlGeneratorInterface $router, string $cacheDir, string $publicPrefix = '')
     {
         $this->engine = $engine;
         $this->translator = $translator;
+        $this->router = $router;
         $this->cacheDir = $cacheDir;
         $this->publicPrefix = $publicPrefix;
     }
@@ -30,6 +33,7 @@ class FilesystemCache implements TemplateCacheInterface
     {
         $originalLocale = $this->translator->getLocale();
         $this->translator->setLocale($locale);
+        $this->setRouterLocale($locale);
 
         try {
             $content = $this->engine->render($cacheableTemplate->getTemplate(), $cacheableTemplate->getTemplateVars());
@@ -41,6 +45,7 @@ class FilesystemCache implements TemplateCacheInterface
             throw $e;
         } finally {
             $this->translator->setLocale($originalLocale);
+            $this->setRouterLocale($originalLocale);
         }
     }
 
@@ -94,6 +99,13 @@ class FilesystemCache implements TemplateCacheInterface
         if (false === file_put_contents($fullPath, $content)) {
             throw new \RuntimeException(sprintf('Unable to create file "%s".', $fullPath));
         }
+    }
+
+    private function setRouterLocale(string $locale)
+    {
+        $context = $this->router->getContext();
+        $context->setParameter('_locale', $locale);
+        $this->router->setContext($context);
     }
 
     private function getAbsolutePath(string $relativePath): string
