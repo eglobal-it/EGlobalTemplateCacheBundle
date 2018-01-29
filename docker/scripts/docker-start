@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+CONTAINERS_PREFIX=eg-templates
+
+if command -v "docker-sync" >/dev/null 2>&1 ; then
+    $(dirname $0)/docker-stop \
+        && cd $(dirname $0)/../../ \
+        && docker-sync stop \
+        && docker-sync start \
+        && cd $(dirname $0)/../ \
+        && docker-compose -f docker-compose.yml -f docker-compose.sync.yml -p $CONTAINERS_PREFIX build \
+        && docker-compose -f docker-compose.yml -f docker-compose.sync.yml -p $CONTAINERS_PREFIX up -d; \
+        cd ->/dev/null
+else
+    $(dirname $0)/docker-stop && \
+        cd $(dirname $0)/../ \
+        && docker-compose -p $CONTAINERS_PREFIX build \
+        && docker-compose -p $CONTAINERS_PREFIX up -d; \
+        cd ->/dev/null
+fi

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker exec -it eglobal-template-cache-dev bash -c "su ${1-docker}"
