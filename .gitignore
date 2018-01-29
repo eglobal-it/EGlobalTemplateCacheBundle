@@ -1,6 +1,11 @@
 .idea/
-vendor/
-composer.lock
-phpunit.xml
-composer.phar
-Tests/Fixtures/temp/
+/.docker-sync
+
+/phpunit.xml
+/composer.lock
+/.php_cs
+/.php_cs.cache
+/vendor/
+/var/
+
+/tests/Fixtures/temp/

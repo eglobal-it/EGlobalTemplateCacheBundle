@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/../test \
+    && docker build --build-arg BRANCH=${1-master} .

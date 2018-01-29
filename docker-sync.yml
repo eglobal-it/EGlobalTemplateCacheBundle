@@ -1,0 +1,11 @@
+version: "2"
+
+options:
+    verbose: false
+
+syncs:
+    eglobal-template-cache-dev-sync:
+        src: "."
+        sync_userid: "999"
+        sync_excludes:
+            - ".idea"

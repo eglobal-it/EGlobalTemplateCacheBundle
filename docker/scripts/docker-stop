@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+CONTAINERS_PREFIX=eg-templates
+
+if command -v "docker-sync" >/dev/null 2>&1 ; then
+    cd $(dirname $0)/../../ \
+        && docker-sync stop; \
+        cd ->/dev/null
+fi
+
+cd $(dirname $0)/../ \
+    && docker-compose -p $CONTAINERS_PREFIX kill \
+    && yes | docker-compose -p $CONTAINERS_PREFIX rm>/dev/null

@@ -1,0 +1,17 @@
+parameters:
+    kernel.secret: secret
+    log_file: "%kernel.logs_dir%/test.log"
+    temp_dir: "%kernel.root_dir%/temp"
+
+framework:
+    assets: ~
+    translator: ~
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+        strict_requirements: ~
+    templating:
+        engines: ['twig']
+
+eglobal_template_cache:
+    locales: ["en"]
+    cache_dir: "%kernel.root_dir%/cache"
