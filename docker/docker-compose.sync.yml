@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+    dev:
+        volumes:
+            - "eglobal-template-cache-dev-sync:/var/www:nocopy"
+volumes:
+    eglobal-template-cache-dev-sync:
+        external: true

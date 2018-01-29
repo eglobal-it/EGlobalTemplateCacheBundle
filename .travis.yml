@@ -13,11 +13,11 @@ matrix:
     fast_finish: true
     include:
         - php: 7.0
-          env: SYMFONY_VERSION='2.8.*'
-        - php: 7.0
-          env: SYMFONY_VERSION='3.1.*'
-        - php: 7.0
-          env: SYMFONY_VERSION='3.2.*'
+          env: SYMFONY_VERSION='3.4.*'
+        - php: 7.1
+          env: SYMFONY_VERSION='3.4.*'
+        - php: 7.2
+          env: SYMFONY_VERSION='3.4.*'
 
 before_install:
     - phpenv config-add travis.php.ini
@@ -29,3 +29,4 @@ install:
 
 script:
     - vendor/bin/phpunit
+    - vendor/bin/php-cs-fixer fix --dry-run -v --using-cache=null src

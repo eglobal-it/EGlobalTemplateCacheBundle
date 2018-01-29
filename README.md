@@ -9,7 +9,7 @@ Install this bundle using Composer. Add the following to your composer.json:
 ```json
 {
     "require": {
-        "eglobal/template-cache-bundle": "^1.0.0"
+        "eglobal/template-cache-bundle": "^3.4"
     }
 }
 ```
@@ -35,7 +35,7 @@ parameters:
         - es
         - de
 
-# Add the bundle to assetic
+# If using Assetic, add the bundle to the config
 assetic:
     bundles:
         - EGlobalTemplateCacheBundle
