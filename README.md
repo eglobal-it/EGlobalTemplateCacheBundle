@@ -9,7 +9,7 @@ Install this bundle using Composer. Add the following to your composer.json:
 ```json
 {
     "require": {
-        "eglobal/template-cache-bundle": "^3.4"
+        "eglobal/template-cache-bundle": "~1.0"
     }
 }
 ```
