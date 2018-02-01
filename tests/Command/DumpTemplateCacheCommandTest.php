@@ -49,6 +49,7 @@ class DumpTemplateCacheCommandTest extends KernelTestCase
             ->getMock();
 
         $this->command = $this->getMockBuilder(DumpTemplateCacheCommand::class)
+            ->setConstructorArgs([$this->dumper, $this->debugDumper])
             ->setMethods(['getDumper'])
             ->getMock();
 
