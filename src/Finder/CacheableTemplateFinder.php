@@ -9,10 +9,10 @@ use EGlobal\Bundle\TemplateCacheBundle\Annotation\CacheableTemplate;
 use EGlobal\Bundle\TemplateCacheBundle\Helper\FileContentTokenizer;
 use EGlobal\Bundle\TemplateCacheBundle\Model\CacheableTemplate as CacheableTemplateModel;
 use ReflectionMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CacheableTemplateFinder implements CacheableTemplateFinderInterface
 {
