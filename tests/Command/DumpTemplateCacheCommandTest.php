@@ -53,7 +53,7 @@ class DumpTemplateCacheCommandTest extends KernelTestCase
             ->setMethods(['getDumper'])
             ->getMock();
 
-        $application = new Application(self::$kernel);
+        $application = new Application();
         $application->add($this->command);
 
         $this->tester = new CommandTester($this->command);

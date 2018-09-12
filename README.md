@@ -65,15 +65,13 @@ Mark controller routes as cacheable
 namespace Acme\FooBundle\Controller;
 
 use EGlobal\Bundle\TemplateCacheBundle\Annotation\CacheableTemplate;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class MyController extends Controller
 {
     /**
-     * @Method("GET")
-     * @Route("/my/foo.html", name="my.template.foo", options={"expose"=true})
+     * @Route(methods={"GET"}, path="/my/foo.html", name="my.template.foo", options={"expose"=true})
      * @CacheableTemplate("AcmeFooBundle:Template:foo.html.twig")
      */
     public function fooAction()
@@ -82,8 +80,7 @@ class MyController extends Controller
     }
     
     /**
-     * @Method("GET")
-     * @Route("/my/bar.svg", name="my.template.bar", options={"expose"=true})
+     * @Route(methods={"GET"}, path="/my/bar.svg", name="my.template.bar", options={"expose"=true})
      * @CacheableTemplate("AcmeFooBundle:Template:bar.svg.twig")
      */
     public function barAction()

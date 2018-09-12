@@ -1,7 +1,7 @@
 language: php
 
 php:
-    - 7.0
+    - 7.1
 
 sudo: false
 
@@ -12,12 +12,10 @@ cache:
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
-          env: SYMFONY_VERSION='3.4.*'
         - php: 7.1
-          env: SYMFONY_VERSION='3.4.*'
+          env: SYMFONY_VERSION='4.1.*'
         - php: 7.2
-          env: SYMFONY_VERSION='3.4.*'
+          env: SYMFONY_VERSION='4.1.*'
 
 before_install:
     - phpenv config-add travis.php.ini
