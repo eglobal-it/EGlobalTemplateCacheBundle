@@ -8,13 +8,13 @@ use EGlobal\Bundle\TemplateCacheBundle\Cache\FilesystemCache;
 use EGlobal\Bundle\TemplateCacheBundle\Model\CacheableTemplate;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EngineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $engine;
 
@@ -43,15 +43,14 @@ class FilesystemCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->engine = $this->getMockBuilder(EngineInterface::class)->getMock();
-        $this->translator = $this->getMockBuilder(TranslatorInterface::class)->getMock();
-        $this->routerContext = $this->getMockBuilder(RequestContext::class)->getMock();
+        $this->engine = $this->createMock(Environment::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->routerContext = $this->createMock(RequestContext::class);
 
-        $this->router = $this->getMockBuilder(UrlGeneratorInterface::class)->getMock();
-        $this->router->expects($this->any())->method('getContext')->willReturn($this->routerContext);
+        $this->router = $this->createMock(UrlGeneratorInterface::class);
+        $this->router->method('getContext')->willReturn($this->routerContext);
 
         $this->cacheDir = sys_get_temp_dir() . '/templates';
-
         $this->publicPrefix = '/foo/public';
 
         $this->cache = new FilesystemCache($this->engine, $this->translator, $this->router, $this->cacheDir, $this->publicPrefix);
