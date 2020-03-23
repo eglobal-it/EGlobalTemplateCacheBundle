@@ -6,23 +6,23 @@ namespace EGlobal\Bundle\TemplateCacheBundle\Cache;
 
 use EGlobal\Bundle\TemplateCacheBundle\Model\CacheableTemplate;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class FilesystemCache implements TemplateCacheInterface
 {
     const TEMPLATE_FILENAME_TEMPLATE = '%locale%/%hash%.%extension%';
     const MAP_FILENAME_TEMPLATE = '%locale%-%hash%.js';
 
-    private $engine;
+    private $twig;
     private $translator;
     private $router;
     private $cacheDir;
     private $publicPrefix;
 
-    public function __construct(EngineInterface $engine, TranslatorInterface $translator, UrlGeneratorInterface $router, string $cacheDir, string $publicPrefix = '')
+    public function __construct(Environment $twig, TranslatorInterface $translator, UrlGeneratorInterface $router, string $cacheDir, string $publicPrefix = '')
     {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->translator = $translator;
         $this->router = $router;
         $this->cacheDir = $cacheDir;
@@ -36,7 +36,7 @@ class FilesystemCache implements TemplateCacheInterface
         $this->setRouterLocale($locale);
 
         try {
-            $content = $this->engine->render($cacheableTemplate->getTemplate(), array_merge(['_locale' => $locale], $cacheableTemplate->getTemplateVars()));
+            $content = $this->twig->render($cacheableTemplate->getTemplate(), array_merge(['_locale' => $locale], $cacheableTemplate->getTemplateVars()));
             $relativePath = $this->getTemplateRelativePath($content, $locale, $this->resolveTemplateExtension($cacheableTemplate->getTemplate()));
             $this->writeToFile($relativePath, $content);
 
@@ -51,7 +51,7 @@ class FilesystemCache implements TemplateCacheInterface
 
     public function writeMap(array $templateMap, string $locale): string
     {
-        $mapContent = $this->engine->render('@EGlobalTemplateCache/getTemplates.js.twig', [
+        $mapContent = $this->twig->render('@EGlobalTemplateCache/getTemplates.js.twig', [
             'templates' => $templateMap,
         ]);
 

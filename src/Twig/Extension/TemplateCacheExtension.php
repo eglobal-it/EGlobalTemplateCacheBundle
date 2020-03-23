@@ -6,10 +6,10 @@ namespace EGlobal\Bundle\TemplateCacheBundle\Twig\Extension;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class TemplateCacheExtension extends Twig_Extension
+class TemplateCacheExtension extends AbstractExtension
 {
     private $cacheDir;
 
@@ -21,14 +21,12 @@ class TemplateCacheExtension extends Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction('jsTemplateMapFileName', [$this, 'getTemplateMapFileNameLocale']),
+            new TwigFunction('jsTemplateMapFileName', [$this, 'getTemplateMapFileNameLocale']),
         ];
     }
 
     /**
-     * @param string $locale
-     *
-     * @return null|string
+     * @return string|null
      */
     public function getTemplateMapFileNameLocale(string $locale)
     {

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Tests\EGlobal\Bundle\TemplateCacheBundle\Twig\Extension;
 
 use EGlobal\Bundle\TemplateCacheBundle\Twig\Extension\TemplateCacheExtension;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
+use Twig\TemplateWrapper;
 
 class TemplateCacheExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,12 +44,12 @@ class TemplateCacheExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->loadTemplate('{{ jsTemplateMapFileName(\'en\') }}')->render([]));
     }
 
-    private function loadTemplate($template): \Twig_Template
+    private function loadTemplate($template): TemplateWrapper
     {
-        $twig = new \Twig_Environment(new \Twig_Loader_Array(['index' => $template], ['debug' => true, 'cache' => false]));
+        $twig = new Environment(new ArrayLoader(['index' => $template]));
         $twig->addExtension(new TemplateCacheExtension(sys_get_temp_dir() . '/templates'));
 
-        return $twig->loadTemplate('index');
+        return $twig->load('index');
     }
 
     protected function createMapFiles()
