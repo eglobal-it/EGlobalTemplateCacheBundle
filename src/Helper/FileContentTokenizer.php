@@ -36,8 +36,12 @@ class FileContentTokenizer
             if (is_array($token)) {
                 if (T_NAMESPACE === $token[0]) {
                     $namespaceStarted = true;
-                } elseif ($namespaceStarted && T_STRING === $token[0]) {
-                    array_push($namespace, $token[1]);
+                } elseif ($namespaceStarted) {
+                    if ((PHP_VERSION_ID < 80000) && T_STRING === $token[0]) {
+                        $namespace[] = $token[1];
+                    } elseif ((PHP_VERSION_ID >= 80000) && T_NAME_QUALIFIED === $token[0]) {
+                        return $token[1];
+                    }
                 }
             } elseif (count($namespace) && (';' === $token)) {
                 return implode('\\', $namespace);
