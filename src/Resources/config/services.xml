@@ -22,7 +22,7 @@
         </service>
 
         <service id="eglobal_template_cache.cache.filesystem_cache" class="EGlobal\Bundle\TemplateCacheBundle\Cache\FilesystemCache">
-            <argument id="templating.engine.twig" type="service" />
+            <argument id="twig" type="service" />
             <argument id="translator" type="service" />
             <argument id="router" type="service" />
             <argument>%eglobal_template_cache.cache_dir%</argument>
